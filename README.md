@@ -25,3 +25,18 @@ XGBoost significantly outperforms the linear baseline, confirming that hit predi
 
 
 **Top predictive features:** artist hit rate, release decade, genre, and Spotify popularity score, with individual audio features (danceability, energy, valence, etc.) contributing smaller but meaningful signal.
+
+## Limitations & Honest Caveats
+
+This project is built with transparency in mind. A few important caveats:
+
+- **Data leakage avoided, not eliminated entirely.** `Weeks_on_Chart` was deliberately excluded from the feature set as it is only knowable after a song has already charted. `spotify_track_popularity` is retained as it can reflect early streaming momentum for new releases, though in this historical dataset it is a recency-weighted score that decays for older songs regardless of their original chart success.
+
+- **Artist hit rate dominates predictions.** The single strongest predictor is an artist's historical hit rate, computed from their track record in the training data (1958–2021). For artists not present in this dataset (including most contemporary independent musicians), the model defaults to the dataset average (27%), which limits predictive power for genuinely new or unknown artists — arguably the audience this tool is most useful for.
+
+- **Training data ends in 2021.** The model has not seen post-2021 chart trends. Genre, sound, and listening behaviour continue to evolve, and predictions for very recent musical styles should be interpreted cautiously.
+
+- **Audio features alone are weak predictors.** Individual correlation analysis showed that audio characteristics (danceability, energy, valence, etc.) have minimal standalone correlation with hit status. XGBoost captures non-linear combinations of these features, but the model's strongest signals come from contextual features (artist reputation, era, genre) rather than the sound of the song itself.
+
+- **Release Cadence Advisor is rule-based, not model-driven.** The release frequency recommendations shown in the app are general industry guidelines derived from genre conventions, not predictions from the trained model. The dataset does not contain release frequency data needed to make this data-driven.
+
